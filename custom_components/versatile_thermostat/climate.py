@@ -921,7 +921,7 @@ class VersatileThermostat(ClimateEntity, RestoreEntity):
 
     @property
     def ac_mode(self) -> bool:
-        """ Get the ac_mode of the Themostat"""
+        """Get the ac_mode of the Themostat"""
         return self._ac_mode
 
     @property
@@ -1351,7 +1351,9 @@ class VersatileThermostat(ClimateEntity, RestoreEntity):
             return self._power_temp
         else:
             # Select _ac presets if in COOL Mode (or over_switch with _ac_mode)
-            if self._ac_mode and (self._hvac_mode == HVACMode.COOL or not self._is_over_climate):
+            if self._ac_mode and (
+                self._hvac_mode == HVACMode.COOL or not self._is_over_climate
+            ):
                 preset_mode = preset_mode + PRESET_AC_SUFFIX
 
             if self._presence_on is False or self._presence_state in [
@@ -1981,14 +1983,14 @@ class VersatileThermostat(ClimateEntity, RestoreEntity):
 
         # Change temperature with preset named _away
         # new_temp = None
-        #if new_state == STATE_ON or new_state == STATE_HOME:
+        # if new_state == STATE_ON or new_state == STATE_HOME:
         #    new_temp = self._presets[self._attr_preset_mode]
         #    _LOGGER.info(
         #        "%s - Someone is back home. Restoring temperature to %.2f",
         #        self,
         #        new_temp,
         #    )
-        #else:
+        # else:
         #    new_temp = self._presets_away[
         #        self.get_preset_away_name(self._attr_preset_mode)
         #    ]
@@ -2168,8 +2170,14 @@ class VersatileThermostat(ClimateEntity, RestoreEntity):
             self._hvac_mode,
         )
         # Issue 133 - force the temperature in over_climate mode if unerlying are turned on
-        if old_hvac_mode == HVACMode.OFF and self.hvac_mode != HVACMode.OFF and self._is_over_climate:
-            _LOGGER.info("%s - force resent target temp cause we turn on some over climate")
+        if (
+            old_hvac_mode == HVACMode.OFF
+            and self.hvac_mode != HVACMode.OFF
+            and self._is_over_climate
+        ):
+            _LOGGER.info(
+                "%s - force resent target temp cause we turn on some over climate"
+            )
             await self._async_internal_set_temperature(self._target_temp)
 
     async def check_overpowering(self) -> bool:
